@@ -10,7 +10,13 @@ const alertValidacionesTexto = document.getElementById(
 const tablaListaCompras = document.getElementById("tablaListaCompras");
 const cuerpoTabla = tablaListaCompras.getElementsByTagName("tbody").item(0);
 
+const contadorProductos = document.getElementById("contadorProductos");
+const productosTotal = document.getElementById("productosTotal");
+const precioTotal = document.getElementById("PrecioTotal");
+
 let cont = 0;
+let totalEnProductos = 0;
+let costoTotal = 0;
 
 function validarCantidad() {
   if (txtNumber.value.length == 0) {
@@ -29,7 +35,7 @@ function validarCantidad() {
 } //validarCantidad
 
 function getPrecio() {
-  return Math.random(Math.random() * 10000);
+  return Math.random(Math.random() * 10000) / 100;
 } // getPrecio
 
 btnAgregar.addEventListener("click", function (event) {
@@ -71,6 +77,14 @@ btnAgregar.addEventListener("click", function (event) {
     `;
 
     cuerpoTabla.insertAdjacentHTML("beforeend", row);
+    contadorProductos.innerText = cont;
+    totalEnProductos += Number(txtNumber.value);
+    productosTotal.innerText = totalEnProductos;
+    costoTotal += precio * Number(txtNumber.value);
+    precioTotal.innerText = new Intl.NumberFormat("es-MX", {
+      style: "currency",
+      currency: "MXN",
+    }).format(costoTotal);
     txtName.value = "";
     txtNumber.value = "";
     txtName.focus();
