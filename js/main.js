@@ -7,9 +7,13 @@ const alertValidaciones = document.getElementById("alertValidaciones");
 const alertValidacionesTexto = document.getElementById(
   "alertValidacionesTexto"
 );
+const tablaListaCompras = document.getElementById("tablaListaCompras");
+const cuerpoTabla = tablaListaCompras.getElementsByTagName("tbody").item(0);
+
+let cont = 0;
 
 function validarCantidad() {
-  if (txtNumber.value.length === 0) {
+  if (txtNumber.value.length == 0) {
     return false;
   } // Tenga informacion
 
@@ -20,16 +24,18 @@ function validarCantidad() {
   if (Number(txtNumber.value) <= 0) {
     return false;
   } //Mayor que 0
+
   return true;
 } //validarCantidad
 
 function getPrecio() {
-  return Math.random(Math.random() * 10000) / 100;
+  return Math.random(Math.random() * 10000);
 } // getPrecio
 
 btnAgregar.addEventListener("click", function (event) {
   event.preventDefault();
 
+  let isValid = true;
   alertValidacionesTexto.innerHTML = "";
   alertValidaciones.style.display = "none";
   txtName.style.border = "";
@@ -42,6 +48,7 @@ btnAgregar.addEventListener("click", function (event) {
     alertValidacionesTexto.innerHTML =
       "<strong>El nombre del producto no es correcto</strong><br/>";
     alertValidaciones.style.display = "block";
+    isValid = false;
   } //<3
 
   if (!validarCantidad()) {
@@ -49,5 +56,24 @@ btnAgregar.addEventListener("click", function (event) {
     alertValidacionesTexto.innerHTML +=
       "<strong>La cantidad no es correcta</strong><br/>";
     alertValidaciones.style.display = "block";
+    isValid = false;
   } //! validar cantidad
+
+  if (isValid) {
+    cont++;
+    let precio = getPrecio();
+    let row = `<tr>
+                  <td>${cont}</td>
+                  <td>${txtName.value}</td>
+                  <td>${txtNumber.value}</td>
+                  <td>${precio}</td>
+             </tr>
+    `;
+
+    cuerpoTabla.insertAdjacentHTML("beforeend", row);
+    txtName.value = "";
+    txtNumber.value = "";
+    txtName.focus();
+    //agregar los elementos a la tabla
+  } //isValid
 }); //btnAgregar
