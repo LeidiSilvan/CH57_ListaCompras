@@ -23,6 +23,10 @@ function validarCantidad() {
   return true;
 } //validarCantidad
 
+function getPrecio() {
+  return Math.random(Math.random() * 10000) / 100;
+} // getPrecio
+
 btnAgregar.addEventListener("click", function (event) {
   event.preventDefault();
 
