@@ -12,7 +12,7 @@ const cuerpoTabla = tablaListaCompras.getElementsByTagName("tbody").item(0);
 
 const contadorProductos = document.getElementById("contadorProductos");
 const productosTotal = document.getElementById("productosTotal");
-const precioTotal = document.getElementById("PrecioTotal");
+const precioTotal = document.getElementById("precioTotal");
 
 let cont = 0;
 let totalEnProductos = 0;
@@ -100,7 +100,7 @@ btnAgregar.addEventListener("click", function (event) {
     let resumen = {
       cont: cont,
       totalEnProductos: totalEnProductos,
-      costoTotal: costoTotal.toFixed(2),
+      costoTotal: costoTotal,
     };
 
     localStorage.setItem("resumen", JSON.stringify(resumen));
@@ -111,3 +111,35 @@ btnAgregar.addEventListener("click", function (event) {
     //agregar los elementos a la tabla
   } //isValid
 }); //btnAgregar
+
+window.addEventListener("load", function (event) {
+  event.preventDefault();
+
+  if (this.localStorage.getItem("datos") != null) {
+    datos = JSON.parse(this.localStorage.getItem("datos"));
+    datos.forEach((dato) => {
+      let row = `<tr>
+                  <td>${dato.cont}</td>
+                  <td>${dato.nombre}</td>
+                  <td>${dato.cantidad}</td>
+                  <td>${dato.precio}</td>
+             </tr>
+    `;
+      cuerpoTabla.insertAdjacentHTML("beforeend", row);
+    }); // foreach
+  } //datos !=null
+
+  if (this.localStorage.getItem("resumen") != null) {
+    let resumen = JSON.parse(this.localStorage.getItem("resumen"));
+    costoTotal = resumen.costoTotal;
+    totalEnProductos = resumen.totalEnProductos;
+    cont = resumen.cont;
+  } // resumen !=null
+});
+
+contadorProductos.innerText = cont;
+productosTotal.innerText = totalEnProductos;
+precioTotal.innerText = new Intl.NumberFormat("es-MX", {
+  style: "currency",
+  currency: "MXN",
+}).format(costoTotal);
