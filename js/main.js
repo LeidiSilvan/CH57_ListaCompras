@@ -37,7 +37,7 @@ function validarCantidad() {
 } //validarCantidad
 
 function getPrecio() {
-  return Math.random(Math.random() * 10000) / 100;
+  return Math.round(Math.random() * 100 * 100) / 100;
 } // getPrecio
 
 btnAgregar.addEventListener("click", function (event) {
@@ -131,15 +131,54 @@ window.addEventListener("load", function (event) {
 
   if (this.localStorage.getItem("resumen") != null) {
     let resumen = JSON.parse(this.localStorage.getItem("resumen"));
-    costoTotal = resumen.costoTotal;
+    costoTotal = Number(resumen.costoTotal);
     totalEnProductos = resumen.totalEnProductos;
     cont = resumen.cont;
   } // resumen !=null
+
+  // Actualizar interfaz DESPUÉS de cargar los datos
+  contadorProductos.innerText = cont;
+  productosTotal.innerText = totalEnProductos;
+  precioTotal.innerText = new Intl.NumberFormat("es-MX", {
+    style: "currency",
+    currency: "MXN",
+  }).format(costoTotal);
 });
 
-contadorProductos.innerText = cont;
-productosTotal.innerText = totalEnProductos;
-precioTotal.innerText = new Intl.NumberFormat("es-MX", {
-  style: "currency",
-  currency: "MXN",
-}).format(costoTotal);
+// 1. eliminar el localStorage
+btnClear.addEventListener("click", function (event) {
+  event.preventDefault();
+
+  // 1. eliminar el localStorage
+  localStorage.removeItem("datos");
+  localStorage.removeItem("resumen");
+
+  // 2. limpiar tabla
+  cuerpoTabla.innerHTML = "";
+
+  // 3. limpiar los campos
+  txtName.value = "";
+  txtNumber.value = "";
+  txtName.focus();
+
+  // 4. limpiar el borde de los campos
+  txtName.style.border = "";
+  txtNumber.style.border = "";
+
+  // 5. limpiar los alert
+  alertValidacionesTexto.innerHTML = "";
+  alertValidaciones.style.display = "none";
+
+  // 6. limpiar el resumen
+  cont = 0;
+  totalEnProductos = 0;
+  costoTotal = 0;
+
+  contadorProductos.innerText = cont;
+  productosTotal.innerText = totalEnProductos;
+  precioTotal.innerText = new Intl.NumberFormat("es-MX", {
+    style: "currency",
+    currency: "MXN",
+  }).format(costoTotal);
+  datos = new Array();
+}); // limpiar todo
